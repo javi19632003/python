@@ -8,10 +8,10 @@ def inicio(request):
 
 
 def cliente(request):
-    return HttpResponse("alta cliente!")
+    return render(request, "MiApp/cliente.html")
 
 def producto(request):
-    return HttpResponse("alta peoducto!")
+    return render(request, "MiApp/producto.html")
 
 def orden(request):
     return HttpResponse("alta orden!")
