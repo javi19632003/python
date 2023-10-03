@@ -6,11 +6,11 @@ class Productos(models.Model):
     categoria = models.CharField(max_length=20)
     precio    = models.DecimalField(max_digits=19, decimal_places=2)
 
-class clientes(models.Model):
+class Clientes(models.Model):
     nombre    = models.CharField(max_length=60)
     email     = models.EmailField(max_length=50)
     
-class Orden(models.Model):
+class Ordenes(models.Model):
     nroord    = models.IntegerField()
     fecha     = models.DateTimeField()
     idprod    = models.IntegerField()
