@@ -1,9 +1,12 @@
-from django.shortcuts import render
-from django.http      import HttpResponse
-from MiApp.forms      import ClienteForm, ProductoForm, BuscaProductoForm
-from .models          import Clientes, Productos
+from django.shortcuts            import render
+from django.http                 import HttpResponse
+from MiApp.forms                 import ClienteForm, ProductoForm, BuscaProductoForm
+from .models                     import Clientes, Productos
+from django.views.generic        import ListView
+from django.views.generic.detail import DetailView
+from django.views.generic.edit   import CreateView, UpdateView, DeleteView
 
-# Create your views here.
+
 
 def inicio(request):
     if request.method == "GET":
@@ -14,7 +17,7 @@ def inicio(request):
 def orden(request):
     return HttpResponse("alta orden!")
 
-
+# Vista basada en funciones
 def cliente (request) :
     if request.method == "POST":
         miForm = ClienteForm(request.POST)
@@ -31,7 +34,7 @@ def cliente (request) :
 
     return render(request, "MiApp/form_api.html", {"miForm": miForm}) 
 
-
+# Vista basada en funciones
 def producto (request) :
     if request.method == "POST":
         miForm = ProductoForm(request.POST)
@@ -48,7 +51,7 @@ def producto (request) :
 
     return render(request, "MiApp/form_api.html", {"miForm": miForm}) 
 
-
+# Vista basada en funciones
 def buscoproducto(request):
     if request.method == "POST":
         miForm = BuscaProductoForm(request.POST) 
@@ -66,3 +69,13 @@ def buscoproducto(request):
 
 def mostrarproducto(request):
     return HttpResponse("mostrando!")
+
+# Vistas con clases
+
+class CursoListView(ListView):
+    model = Productos
+    template_name = "MiApp/resultados_class.html"
+    
+class CursoDetailView(DetailView):
+    model = Productos
+    template_name = "MiApp/detalle_class.html"    
