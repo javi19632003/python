@@ -27,6 +27,15 @@
                         <li class="nav-item"><a class="nav-link" href="{% url 'Productos' %}">Productos</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'BuscarProducto' %}">Buscar Productos</a></li>
                     </ul>
+                    {% if request.user.is_authenticated %}
+                        <a type="button" class="btn btn-outline-primary me-1" href="{% url 'Registro' %}"> Registrarse </a> 
+                        <a type="button" class="btn btn-outline-danger me-1" href="{% url 'Login' %}"> Ingresar </a> 
+                    {% else %}
+                        <a type="button" class="btn btn-outline-primary me-1" href="{% url 'Registro' %}"> Registrarse </a> 
+                        <a type="button" class="btn btn-outline-danger me-1" href="{% url 'Login' %}"> Ingresar </a> 
+                    {% endif %}
+                
+                
                 </div>
             </div>
         </nav>

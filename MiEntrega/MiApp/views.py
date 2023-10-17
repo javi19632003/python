@@ -1,18 +1,16 @@
 from django.shortcuts            import render
 from django.http                 import HttpResponse
-from MiApp.forms                 import ClienteForm, ProductoForm, BuscaProductoForm
+from MiApp.forms                 import ClienteForm, ProductoForm, BuscaProductoForm, UserRegisterForm
 from .models                     import Clientes, Productos
 from django.views.generic        import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit   import CreateView, UpdateView, DeleteView
-
-
-
+from django.contrib.auth.forms   import AuthenticationForm
+from django.contrib.auth         import login, authenticate
+from django.contrib.auth.models  import User
 def inicio(request):
-    if request.method == "GET":
-        mis_productos = Productos.objects.all()
-    #return render(request, "MiApp/index.html")
-    return render(request, "MiApp/resultados.html", {"productos":mis_productos})
+    mis_productos = Productos.objects.all()
+    return render(request, "MiApp/resultados_class.html", {"productos":mis_productos})
 
 def orden(request):
     return HttpResponse("alta orden!")
@@ -27,8 +25,7 @@ def cliente (request) :
             cliente = Clientes(nombre=datos["nombre"], email=datos["email"])
             cliente.save()
             mis_productos = Productos.objects.all()
-            return render(request, "MiApp/resultados.html", {"productos":mis_productos})
-            #return render(request, "MiApp/index.html")
+            return render(request, "MiApp/resultados_class.html", {"productos":mis_productos})
     else:
         miForm = ClienteForm()
 
@@ -44,8 +41,7 @@ def producto (request) :
             producto = Productos(nombre=datos["nombre"], categoria=datos["categoria"], precio=datos["precio"])
             producto.save()
             mis_productos = Productos.objects.all()
-            return render(request, "MiApp/resultados.html", {"productos":mis_productos})
-            #return render(request, "MiApp/index.html")
+            return render(request, "MiApp/resultados_class.html", {"productos":mis_productos})
     else:
         miForm = ProductoForm()
 
@@ -60,7 +56,7 @@ def buscoproducto(request):
             dato = miForm.cleaned_data
             
             mis_productos = Productos.objects.filter(nombre__icontains=dato["nombre"])
-            return render(request, "MiApp/resultados.html", {"productos":mis_productos})
+            return render(request, "MiApp/resultados_class.html", {"productos":mis_productos})
     else:
         miForm = BuscaProductoForm()
 
@@ -79,3 +75,42 @@ class CursoListView(ListView):
 class CursoDetailView(DetailView):
     model = Productos
     template_name = "MiApp/detalle_class.html"    
+    
+
+def register(request):
+    msg_register = ""
+    if request.method == 'POST':
+
+        form = UserRegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            mis_productos = Productos.objects.all()
+            return render(request, "MiApp/resultados_class.html", {"productos":mis_productos})
+        
+        msg_register = "Error en los datos ingresados"
+
+    form = UserRegisterForm()     
+    return render(request,"Miapp/registro.html" ,  {"form":form, "msg_register": msg_register})
+    
+def login_request(request):
+    msg_login = ""
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+
+        if form.is_valid():
+
+            usuario = form.cleaned_data.get('username')
+            contrasenia = form.cleaned_data.get('password')
+
+            user = authenticate(username= usuario, password=contrasenia)
+            print(user)
+            if user is not None:
+                login(request, user)
+                mis_productos = Productos.objects.all()
+                return render(request, "MiApp/resultados.html", {"productos":mis_productos})
+
+        msg_login = "Usuario o contraseña incorrectos"
+
+    form = AuthenticationForm()
+    
+    return render(request, "Miapp/login.html", {"form": form, "msg_login": msg_login})    
