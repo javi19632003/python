@@ -1,7 +1,8 @@
 from django.urls import path
 #from .views import cliente, producto, orden, inicio
 from MiApp import views
-
+#from django.contrib.auth.views import LogoutView
+#from django.conf import settings
 
 urlpatterns = [
     #path('', views.inicio, name='Inicio'),
@@ -13,7 +14,8 @@ urlpatterns = [
     path('mostrar/', views.mostrarproducto, name='MostrarProducto'),
     path('registro/', views.register, name="Registro"),
     path('login/', views.login_request, name="Login"),
-     path('orden/', views.orden),
+    path('logout/', views.logout_view, name="Logout"),
+    path('orden/', views.orden),
 ]
 
 # URL's basadas en clases

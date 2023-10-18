@@ -7,7 +7,9 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit   import CreateView, UpdateView, DeleteView
 from django.contrib.auth.forms   import AuthenticationForm
 from django.contrib.auth         import login, authenticate
-from django.contrib.auth.models  import User
+from django.contrib.auth.views   import LogoutView
+from django.contrib.auth         import logout
+
 def inicio(request):
     mis_productos = Productos.objects.all()
     return render(request, "MiApp/resultados_class.html", {"productos":mis_productos})
@@ -56,7 +58,7 @@ def buscoproducto(request):
             dato = miForm.cleaned_data
             
             mis_productos = Productos.objects.filter(nombre__icontains=dato["nombre"])
-            return render(request, "MiApp/resultados_class.html", {"productos":mis_productos})
+            return render(request, "MiApp/resultados.html", {"productos":mis_productos})
     else:
         miForm = BuscaProductoForm()
 
@@ -75,8 +77,16 @@ class CursoListView(ListView):
 class CursoDetailView(DetailView):
     model = Productos
     template_name = "MiApp/detalle_class.html"    
-    
 
+   
+def logout_view(request):
+    logout(request)
+    print("en logout")
+   # LogoutView.as_view(template_name='MiApp/logout.html')
+    print("sigo")
+    mis_productos = Productos.objects.all()
+    return render(request, "MiApp/resultados.html", {"productos":mis_productos})
+        
 def register(request):
     msg_register = ""
     if request.method == 'POST':
@@ -114,3 +124,5 @@ def login_request(request):
     form = AuthenticationForm()
     
     return render(request, "Miapp/login.html", {"form": form, "msg_login": msg_login})    
+
+    
