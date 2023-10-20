@@ -5,7 +5,6 @@ from django.conf                            import settings
 def custom_avatar(request):
     context = auth(request)
     user = context['user']
-    print("en contexto")
     if user.is_authenticated:
         image = User1.objects.filter(user= request.user.id)[0]
         mi_avatar = image.dame_ruta()

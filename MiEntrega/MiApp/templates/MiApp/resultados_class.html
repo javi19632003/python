@@ -37,12 +37,12 @@
                             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                                 {% if request.user.is_superuser %}
                                     <div class="text-center">
-                                        <a href="{% url 'Pro_det' producto.id %}" class="btn btn-outline-primary me-1">Editar</a>
-                                        <a href="{% url 'Pro_det' producto.id %}" class="btn btn-outline-danger me-1">Eliminar</a>
+                                        <a href="{% url 'Pro_Up' producto.id %}" class="btn btn-outline-primary me-1">Editar</a>
+                                        <a href="{% url 'Pro_Del' producto.id %}" class="btn btn-outline-danger me-1">Eliminar</a>
                                     </div>
                                 {% else %}
                                     <div class="text-center">
-                                        <a href="{% url 'Pro_det' producto.id %}" class="btn btn-outline-primary">Ver</a>
+                                        <a href="{% url 'Pro_Det' producto.id %}" class="btn btn-outline-primary">Ver</a>
                                     </div>
                                 {% endif %}
                             </div>

@@ -1,0 +1,17 @@
+{% extends 'MiApp/base.html' %}
+
+{% load static %}
+
+{% block title %} Eliminar Producto {% endblock title %}
+
+{% block seccion1 %}
+    
+<form method="POST">
+    {% csrf_token %}
+    Estas seguro/a {{ object }}
+    <input type="submit" value="Borrar">
+</form>
+
+{% endblock seccion1 %}
+
+

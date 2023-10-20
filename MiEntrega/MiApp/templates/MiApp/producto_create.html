@@ -1,0 +1,28 @@
+{% extends 'MiApp/base.html' %}
+
+{% load static %}
+
+{% block title %} Alta Producto {% endblock title %}
+
+{% block seccion1 %}
+    
+
+
+<form method="POST">
+    {% csrf_token %}
+    <div class="mx-auto"> 
+        <div>{{ form.nombre }}</div>
+        <div>{{ form.categoria }}</div>
+        <div>{{ form.precio }}</div>
+        <div>{{ form.descrip }}</div>
+        <div>{{ form.imagen }}</div>   
+        <input type="submit" value="Alta">
+    </div>
+</form>
+
+
+
+
+{% endblock seccion1 %}
+
+

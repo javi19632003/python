@@ -21,8 +21,8 @@ urlpatterns = [
 # URL's basadas en clases
 urlpatterns += [
     
-    path('class-detalle-producto/<pk>/', views.ProductoDetailView.as_view(), name="Pro_det"),
-  #  path('class-crear-producto/', views.CursoCreateView.as_view(), name="Pro_Cre"),
-  #  path('class-up-producto/<pk>/', views.CursoUpdateView.as_view(), name="Pro_Up"),
-  #  path('class-del-producto/<pk>/', views.CursoDeleteView.as_view(), name="Pro_Del"),
+    path('class-detalle-producto/<pk>/', views.ProductoDetailView.as_view(), name="Pro_Det"),
+    path('class-crear-producto/', views.ProductoCreateView.as_view(), name="Pro_Cre"),
+    path('class-up-producto/<pk>/', views.ProductoUpdateView.as_view(), name="Pro_Up"),
+    path('class-del-producto/<pk>/', views.ProductoDeleteView.as_view(), name="Pro_Del"),
 ]

@@ -3,14 +3,19 @@ from django.shortcuts            import render
 from django.http                 import HttpResponse
 from MiApp.forms                 import ClienteForm, ProductoForm, BuscaProductoForm, UserRegisterForm
 from .models                     import Clientes, Productos, User1
-from django.views.generic        import ListView
-from django.views.generic.detail import DetailView
-from django.views.generic.edit   import CreateView, UpdateView, DeleteView
+
 from django.contrib.auth.forms   import AuthenticationForm
 from django.contrib.auth         import login, authenticate
 from django.contrib.auth.views   import LogoutView
 from django.contrib.auth         import logout
 from .context_processors         import custom_avatar
+# Import de vistas basadas en clases 
+from django.views.generic        import ListView
+from django.views.generic.detail import DetailView
+from django.views.generic.edit   import CreateView, UpdateView, DeleteView
+from django.urls                 import reverse_lazy
+
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 def inicio(request):
     mis_productos = Productos.objects.all()
@@ -55,6 +60,7 @@ def producto (request) :
     return render(request, "MiApp/form_api.html", {"miForm": miForm}) 
 
 # Vista basada en funciones
+# Busca los productos que tengan concidencias en el nombre con el string buscado
 def buscoproducto(request):
     if request.method == "POST":
         miForm = BuscaProductoForm(request.POST) 
@@ -74,6 +80,15 @@ def buscoproducto(request):
 
     return render(request, "MiApp/form_api.html", {"miForm": miForm})
 
+class ProductoCreateView(LoginRequiredMixin, CreateView):
+    model = Productos
+    template_name = "MiApp/producto_create.html"
+    fields = ["nombre", "categoria", "precio", "descrip", "imagen" ]
+   # En success_url indicamos la vista que queremos visitar una vez que se genera un curso con éxito. Lo podemos hacer de 2 formas:
+    # Indicando la URL
+    # success_url = "/curso-list/"
+    # Con el reverse_lazy indicamos el nombre de la vista
+    success_url = reverse_lazy("List")
 
 def mostrarproducto(request):
     return HttpResponse("mostrando!")
@@ -86,9 +101,20 @@ class ProductoListView(ListView):
     
 class ProductoDetailView(DetailView):
     model = Productos
-    template_name = "MiApp/detalle_class.html"    
+    template_name = "MiApp/detalle_class.html" 
+    
 
-   
+class ProductoDeleteView(LoginRequiredMixin, DeleteView):
+    model = Productos
+    success_url = reverse_lazy("List")
+    template_name = 'MiApp/producto_delete.html'
+
+class ProductoUpdateView(LoginRequiredMixin, UpdateView):
+    model = Productos
+    success_url = reverse_lazy("List")
+    fields = ["nombre", "categoria", "precio", "descrip", "imagen" ]
+    template_name = "MiApp/producto_update.html"   
+
 def logout_view(request):
     logout(request)
     mis_productos = Productos.objects.all()
