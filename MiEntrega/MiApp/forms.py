@@ -2,10 +2,6 @@ from django                      import forms
 from django.contrib.auth.forms   import UserCreationForm
 from django.contrib.auth.models  import User
 
-class ClienteForm(forms.Form):
-    nombre = forms.CharField(max_length=60)
-    email = forms.EmailField(max_length=50)
-    
 
 class ProductoForm(forms.Form):
     nombre    = forms.CharField(max_length=80)

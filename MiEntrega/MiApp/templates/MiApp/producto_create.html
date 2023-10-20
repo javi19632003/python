@@ -8,14 +8,14 @@
     
 
 
-<form method="POST">
+<form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="mx-auto"> 
-        <div>{{ form.nombre }}</div>
-        <div>{{ form.categoria }}</div>
-        <div>{{ form.precio }}</div>
-        <div>{{ form.descrip }}</div>
-        <div>{{ form.imagen }}</div>   
+        <div>Nombre: {{ form.nombre }}</div>
+        <div>Categoría: {{ form.categoria }}</div>
+        <div>Precio $: {{ form.precio }}</div>
+        <div>Descripción: {{ form.descrip }}</div>
+        <div>Imagen: {{ form.imagen }}</div>   
         <input type="submit" value="Alta">
     </div>
 </form>

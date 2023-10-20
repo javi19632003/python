@@ -1,20 +1,20 @@
 from typing import Any
 from django.shortcuts            import render
 from django.http                 import HttpResponse
-from MiApp.forms                 import ClienteForm, ProductoForm, BuscaProductoForm, UserRegisterForm
-from .models                     import Clientes, Productos, User1
+from MiApp.forms                 import ProductoForm, BuscaProductoForm, UserRegisterForm
+from .models                     import Productos, User1
 
 from django.contrib.auth.forms   import AuthenticationForm
 from django.contrib.auth         import login, authenticate
-from django.contrib.auth.views   import LogoutView
+#from django.contrib.auth.views   import LogoutView
 from django.contrib.auth         import logout
-from .context_processors         import custom_avatar
+#from .context_processors         import custom_avatar
 # Import de vistas basadas en clases 
 from django.views.generic        import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit   import CreateView, UpdateView, DeleteView
 from django.urls                 import reverse_lazy
-
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 def inicio(request):
@@ -24,26 +24,13 @@ def inicio(request):
            }
     return render(request, "MiApp/resultados_class.html", data)
 
-def orden(request):
-    return HttpResponse("alta orden!")
+def about(request):
+    return HttpResponse("acerca de !")
+
+
 
 # Vista basada en funciones
-def cliente (request) :
-    if request.method == "POST":
-        miForm = ClienteForm(request.POST)
-    
-        if miForm.is_valid():
-            datos = miForm.cleaned_data
-            cliente = Clientes(nombre=datos["nombre"], email=datos["email"])
-            cliente.save()
-            mis_productos = Productos.objects.all()
-            return render(request, "MiApp/resultados_class.html", {"productos":mis_productos})
-    else:
-        miForm = ClienteForm()
-
-    return render(request, "MiApp/form_api.html", {"miForm": miForm}) 
-
-# Vista basada en funciones
+@login_required
 def producto (request) :
     if request.method == "POST":
         miForm = ProductoForm(request.POST)
@@ -84,10 +71,6 @@ class ProductoCreateView(LoginRequiredMixin, CreateView):
     model = Productos
     template_name = "MiApp/producto_create.html"
     fields = ["nombre", "categoria", "precio", "descrip", "imagen" ]
-   # En success_url indicamos la vista que queremos visitar una vez que se genera un curso con éxito. Lo podemos hacer de 2 formas:
-    # Indicando la URL
-    # success_url = "/curso-list/"
-    # Con el reverse_lazy indicamos el nombre de la vista
     success_url = reverse_lazy("List")
 
 def mostrarproducto(request):
@@ -127,9 +110,9 @@ def register(request):
         form = UserRegisterForm(request.POST)
         if form.is_valid():
             form.save()
+            #User1.objects.create(imagen= " ", user=form.data["username"])
             mis_productos = Productos.objects.all()
-   
-            return render(request, "MiApp/resultados_class.html", {"productos":mis_productos})
+            return render(request, "MiApp/resultados.html", {"productos":mis_productos})
         
         msg_register = "Error en los datos ingresados"
 
@@ -143,7 +126,6 @@ def login_request(request):
         form = AuthenticationForm(request, data=request.POST)
 
         if form.is_valid():
-            print("entre en login")    
             usuario = form.cleaned_data.get('username')
             contrasenia = form.cleaned_data.get('password')
             user = authenticate(username= usuario, password=contrasenia)
@@ -151,11 +133,7 @@ def login_request(request):
             if user is not None:
                 login(request, user)
                 mis_productos = Productos.objects.all()
-                data = {
-                    "productos":mis_productos,
-                }
-                
-                return render(request, "MiApp/resultados.html", data)
+                return render(request, "MiApp/resultados.html", {"productos":mis_productos})
 
         msg_login = "Usuario o contraseña incorrectos"
 
