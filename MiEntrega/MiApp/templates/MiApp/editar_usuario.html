@@ -1,0 +1,23 @@
+
+{% extends 'MiApp/base.html' %}
+
+{% load static %}
+
+{% block title %} Editar Usuario {% endblock title %}
+
+
+{% block seccion1 %}
+  <h3>Hola {{usuario}}</h3>
+  <form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+      {% if mi_avatar %}
+        <img style=" height:45px; width:45px;" src="{{mi_avatar}}" alt="">
+      {% endif %}
+
+      <table>
+          {{ mi_formulario.as_table }}
+      </table>
+
+      <input type="submit", value="Actualizar">
+  </form>  
+{% endblock seccion1 %}

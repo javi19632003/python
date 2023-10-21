@@ -1,7 +1,7 @@
 from typing import Any
 from django.shortcuts            import render
 from django.http                 import HttpResponse
-from MiApp.forms                 import ProductoForm, BuscaProductoForm, UserRegisterForm
+from MiApp.forms                 import ProductoForm, BuscaProductoForm, UserRegisterForm, UserEditForm
 from .models                     import Productos, User1
 
 from django.contrib.auth.forms   import AuthenticationForm
@@ -16,6 +16,7 @@ from django.views.generic.edit   import CreateView, UpdateView, DeleteView
 from django.urls                 import reverse_lazy
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect
 
 def inicio(request):
     mis_productos = Productos.objects.all()
@@ -25,9 +26,7 @@ def inicio(request):
     return render(request, "MiApp/resultados_class.html", data)
 
 def about(request):
-    return HttpResponse("acerca de !")
-
-
+    return render(request, "MiApp/about.html")
 
 # Vista basada en funciones
 @login_required
@@ -39,8 +38,9 @@ def producto (request) :
             datos = miForm.cleaned_data
             producto = Productos(nombre=datos["nombre"], categoria=datos["categoria"], precio=datos["precio"])
             producto.save()
-            mis_productos = Productos.objects.all()
-            return render(request, "MiApp/resultados_class.html", {"productos":mis_productos})
+            return redirect('List')
+            #mis_productos = Productos.objects.all()
+            #return render(request, "MiApp/resultados_class.html", {"productos":mis_productos})
     else:
         miForm = ProductoForm()
 
@@ -72,9 +72,6 @@ class ProductoCreateView(LoginRequiredMixin, CreateView):
     template_name = "MiApp/producto_create.html"
     fields = ["nombre", "categoria", "precio", "descrip", "imagen" ]
     success_url = reverse_lazy("List")
-
-def mostrarproducto(request):
-    return HttpResponse("mostrando!")
 
 # Vistas con clases
 
@@ -110,9 +107,9 @@ def register(request):
         form = UserRegisterForm(request.POST)
         if form.is_valid():
             form.save()
-            #User1.objects.create(imagen= " ", user=form.data["username"])
-            mis_productos = Productos.objects.all()
-            return render(request, "MiApp/resultados.html", {"productos":mis_productos})
+            return redirect('List')
+           # mis_productos = Productos.objects.all()
+           # return render(request, "MiApp/resultados.html", {"productos":mis_productos})
         
         msg_register = "Error en los datos ingresados"
 
@@ -132,8 +129,9 @@ def login_request(request):
 
             if user is not None:
                 login(request, user)
-                mis_productos = Productos.objects.all()
-                return render(request, "MiApp/resultados.html", {"productos":mis_productos})
+                return redirect('List')
+                #mis_productos = Productos.objects.all()
+                #return render(request, "MiApp/resultados.html", {"productos":mis_productos})
 
         msg_login = "Usuario o contraseña incorrectos"
 
@@ -146,3 +144,54 @@ def login_request(request):
     return render(request, "Miapp/login.html", data)    
 
     
+# Vista de editar el perfil
+@login_required
+def edit(request):
+    usuario = request.user
+    
+    if request.method == 'POST':
+        miFormulario = UserEditForm(request.POST, request.FILES)
+        if miFormulario.is_valid():
+
+            informacion = miFormulario.cleaned_data
+ 
+            if informacion["password1"] != informacion["password2"]:
+                datos = {
+                    'first_name': usuario.first_name,
+                    'last_name': usuario.last_name,
+                    'email': usuario.email
+                    
+                }
+                miFormulario = UserEditForm(initial=datos)
+
+            else:
+                usuario.email = informacion['email']
+                if informacion["password1"]:
+                    usuario.set_password(informacion["password1"])
+                usuario.last_name = informacion['last_name']
+                usuario.first_name = informacion['first_name']
+                usuario.save()
+
+                # Creamos nueva imagen en la tabla
+                try:
+                    avatar = User1.objects.get(user=usuario)
+                except User1.DoesNotExist:
+                    avatar = User1(user=usuario, imagen=informacion["imagen"])
+                    avatar.save()
+                else:
+                    avatar.imagen = informacion["imagen"]
+                    avatar.save()
+                    return redirect('List')
+                    #mis_productos = Productos.objects.all()
+                    #return render(request, "MiApp/resultados.html", {"productos":mis_productos})
+                
+    else:
+        datos = {
+            'first_name': usuario.first_name,
+            'last_name': usuario.last_name,
+            'email': usuario.email
+        }
+        miFormulario = UserEditForm(initial=datos)
+
+    return render(request, "MiApp/editar_usuario.html", {"mi_formulario": miFormulario, "usuario": usuario})
+

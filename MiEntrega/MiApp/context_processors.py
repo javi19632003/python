@@ -6,8 +6,14 @@ def custom_avatar(request):
     context = auth(request)
     user = context['user']
     if user.is_authenticated:
-        image = User1.objects.filter(user= request.user.id)[0]
-        mi_avatar = image.dame_ruta()
+        try:
+            image = User1.objects.get(user= request.user.id)
+            mi_avatar = image.dame_ruta()
+            print("sin error")
+        except:
+            print("salgo por error")
+            mi_avatar = ""
+            
         if len(mi_avatar) > 0:
             context['mi_avatar'] = mi_avatar
         else:

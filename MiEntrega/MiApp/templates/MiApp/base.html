@@ -33,7 +33,7 @@
                         
                     </ul>
                     {% if request.user.is_authenticated %}
-                        <a type="button" class="btn btn-outline-primary me-1" href="{% url 'Registro' %}"> Editar Cuenta </a> 
+                        <a type="button" class="btn btn-outline-primary me-1" href="{% url 'Edit' %}"> Editar Cuenta </a> 
                         <a type="button" class="btn btn-outline-danger me-1" href="{% url 'Logout' %}"> Cerrar sesión </a> 
                         {% if mi_avatar %}
                             <img style=" height:45px; width:45px;" src="{{mi_avatar}}" alt="">
