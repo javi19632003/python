@@ -11,7 +11,10 @@ urlpatterns = [
     path('edit/', views.edit, name="Edit"),
     path('login/', views.login_request, name="Login"),
     path('logout/', views.logout_view, name="Logout"),
-   
+    path('agregar_carrito/<int:producto_id>/', views.agregar_carrito, name="add_carrito"),
+    path('eliminar_carrito/<int:producto_id>/', views.eliminar_carrito, name="del_carrito"),
+    path('restar_carrito/<int:producto_id>/', views.restar_carrito, name="sub_carrito"),
+    path('limpiar_carrito/', views.limpiar_carrito, name="cls_carrito"),
 ]
 
 # URL's basadas en clases

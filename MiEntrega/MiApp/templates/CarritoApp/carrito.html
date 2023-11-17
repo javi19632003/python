@@ -1,0 +1,55 @@
+{% extends  "MiApp/base.html" %}
+
+{% load static %}
+
+{% block title %} Formulario {% endblock title %}
+
+{% block seccion1 %}
+    <div class="alert alert-primary" role="alert">
+        <table class="table table-bordered">
+            <thread>
+                <tr>
+                    <th scope="row" colspan="3" class="text-center"> Carrito de Compras</th>
+                </tr>
+                <tr>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Precio</th>
+                    <th scope="col">Cantidad</th>
+                </tr>
+            </thread>
+            <tbody>
+                {% if request.session.carrito.items %}
+                {% for key, value in request.carrito.items %}
+                    <tr>
+                        <td> {{value.nombre}} </td>
+                        <td> {{value.acumulado}} </td>
+                        <td> {{value.cantidad}} </td>
+                        <a class="badge btn btn-dark badge-dark" href="{% url 'List' value.producto_id %}">+</a> 
+                        <a class="badge btn btn-dark badge-dark" href="{% url 'List' value.producto_id %}">-</a>     
+                    </tr>
+                {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="3">
+                            <div class="alert alert-danger text-centered"> Sin Productos </div>
+                        </td>
+                    </tr>
+                {% endif %}
+
+                <tr>
+                    <th scope="row">Total</th>
+                    <td colspan="2"> $ {{total_carrito}} </td>
+                </tr>
+            </tbody>
+        </table>
+    <br>
+    </div>
+    <div class="row text-center">
+        <div class="col -6">
+            <a type="button" class="btn btn-danger" href="{% url 'List' value.producto_id %}">Limpiar</a>
+        </div>
+        <div class="col -6">
+            <a type="button" class="btn btn-success" href="{% url 'List' value.producto_id %}">Guardar</a>
+        </div>
+    </div>    
+{% endblock seccion1 %}

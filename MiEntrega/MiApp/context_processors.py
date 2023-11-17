@@ -20,3 +20,4 @@ def custom_avatar(request):
             context['mi_avatar'] = f"{settings.MEDIA_URL}avatares/generico.png"
     return context        
                 
+                

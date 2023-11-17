@@ -3,7 +3,7 @@ from django.shortcuts            import render
 from django.http                 import HttpResponse
 from MiApp.forms                 import ProductoForm, BuscaProductoForm, UserRegisterForm, UserEditForm
 from .models                     import Productos, User1
-
+from CarritoApp.carrito          import Carrito
 from django.contrib.auth.forms   import AuthenticationForm
 from django.contrib.auth         import login, authenticate
 #from django.contrib.auth.views   import LogoutView
@@ -195,3 +195,31 @@ def edit(request):
 
     return render(request, "MiApp/editar_usuario.html", {"mi_formulario": miFormulario, "usuario": usuario})
 
+
+
+@login_required
+def agregar_carrito (request, producto_id) :
+    carrito  = Carrito(request)
+    producto = Productos.objects.get(id=producto_id)
+    Carrito.agregar(producto)
+    return redirect('List')
+
+@login_required
+def eliminar_carrito (request, producto_id) :
+    carrito  = Carrito(request)
+    producto = Productos.objects.get(id=producto_id)
+    Carrito.eliminar(producto)
+    return redirect('List')
+
+@login_required
+def restar_carrito (request, producto_id) :
+    carrito  = Carrito(request)
+    producto = Productos.objects.get(id=producto_id)
+    Carrito.restar(producto)
+    return redirect('List')
+
+@login_required
+def limpiar_carrito (request) :
+    carrito  = Carrito(request)
+    Carrito.limpar()
+    return redirect('List')
