@@ -9,9 +9,7 @@ def custom_avatar(request):
         try:
             image = User1.objects.get(user= request.user.id)
             mi_avatar = image.dame_ruta()
-            print("sin error")
         except:
-            print("salgo por error")
             mi_avatar = ""
             
         if len(mi_avatar) > 0:

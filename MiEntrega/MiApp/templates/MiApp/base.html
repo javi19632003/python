@@ -39,6 +39,12 @@
                             <img style=" height:45px; width:45px;" src="{{mi_avatar}}" alt="">
                         {% endif %}
                         <h5> Que Lindo verte {{user.username}}</h5>
+                        &nbsp;&nbsp;
+                        <a type="button" class="btn btn-outline-dark" href="{% url 'read_carrito' %}">
+                            <i class="bi-cart-fill me-1"></i>
+                            Carrito
+                            <span class="badge bg-dark text-white ms-1 rounded-pill">{{total_items}}</span>
+                        </a>
                         {% else %}
                         <a type="button" class="btn btn-outline-primary me-1" href="{% url 'Registro' %}"> Registrarse </a> 
                         <a type="button" class="btn btn-outline-danger me-1" href="{% url 'Login' %}"> Ingresar </a> 

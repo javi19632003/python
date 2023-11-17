@@ -19,13 +19,15 @@
             </thread>
             <tbody>
                 {% if request.session.carrito.items %}
-                {% for key, value in request.carrito.items %}
+                {% for key, value in request.session.carrito.items %}
                     <tr>
                         <td> {{value.nombre}} </td>
                         <td> {{value.acumulado}} </td>
                         <td> {{value.cantidad}} </td>
-                        <a class="badge btn btn-dark badge-dark" href="{% url 'List' value.producto_id %}">+</a> 
-                        <a class="badge btn btn-dark badge-dark" href="{% url 'List' value.producto_id %}">-</a>     
+                        <td>
+                        <a class="badge btn btn-dark badge-dark" href="{% url 'add_carrito' value.producto_id %}">+</a> 
+                        <a class="badge btn btn-dark badge-dark" href="{% url 'sub_carrito' value.producto_id %}">-</a> 
+                        </td>    
                     </tr>
                 {% endfor %}
                 {% else %}
@@ -46,10 +48,10 @@
     </div>
     <div class="row text-center">
         <div class="col -6">
-            <a type="button" class="btn btn-danger" href="{% url 'List' value.producto_id %}">Limpiar</a>
+            <a type="button" class="btn btn-danger" href="{% url 'cls_carrito'  %}">Limpiar</a>
         </div>
         <div class="col -6">
-            <a type="button" class="btn btn-success" href="{% url 'List' value.producto_id %}">Guardar</a>
+            <a type="button" class="btn btn-success" href="{% url 'List'  %}">Guardar</a>
         </div>
     </div>    
 {% endblock seccion1 %}

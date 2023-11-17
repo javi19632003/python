@@ -23,7 +23,7 @@
                 </div>
                 <p class="lead">{{productos.descrip}}</p>
                 <div class="d-flex">
-                    <a type="button" class="btn btn-outline-dark flex-shrink-0 bi-cart-fill me-1" href="{% url 'List' %}"> Agregar al Carrito </a> 
+                    <a type="button" class="btn btn-outline-dark flex-shrink-0 bi-cart-fill me-1" href="{% url 'add_carrito' productos.id %}"> Agregar al Carrito </a> 
                 </div>
                 <p> </p>
                 <div class="d-flex">

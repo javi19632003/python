@@ -201,25 +201,29 @@ def edit(request):
 def agregar_carrito (request, producto_id) :
     carrito  = Carrito(request)
     producto = Productos.objects.get(id=producto_id)
-    Carrito.agregar(producto)
+    carrito.agregar(producto)
     return redirect('List')
 
 @login_required
 def eliminar_carrito (request, producto_id) :
     carrito  = Carrito(request)
     producto = Productos.objects.get(id=producto_id)
-    Carrito.eliminar(producto)
+    carrito.eliminar(producto)
     return redirect('List')
 
 @login_required
 def restar_carrito (request, producto_id) :
     carrito  = Carrito(request)
     producto = Productos.objects.get(id=producto_id)
-    Carrito.restar(producto)
+    carrito.restar(producto)
     return redirect('List')
 
 @login_required
 def limpiar_carrito (request) :
     carrito  = Carrito(request)
-    Carrito.limpar()
+    carrito.limpar()
     return redirect('List')
+
+@login_required
+def mirar_carrito (request) :
+    return render(request, 'CarritoApp/carrito.html')
